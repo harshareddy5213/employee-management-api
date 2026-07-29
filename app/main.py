@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from .database import Base, engine
-from .models import Employee
+from .routers import employees
 
 
 Base.metadata.create_all(bind=engine)
@@ -11,6 +11,9 @@ app = FastAPI(
     description="RESTful API for managing employees",
     version="1.0.0"
 )
+
+
+app.include_router(employees.router)
 
 
 @app.get("/")

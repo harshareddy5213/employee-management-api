@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 from .. import crud, schemas
 from ..database import get_db
+from .auth import get_current_user
 
 
 router = APIRouter(
@@ -17,9 +18,13 @@ router = APIRouter(
 )
 def create_employee(
     employee: schemas.EmployeeCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
-    return crud.create_employee(db, employee)
+    return crud.create_employee(
+        db,
+        employee
+    )
 
 
 @router.get(
@@ -67,7 +72,8 @@ def get_employee(
 def update_employee(
     employee_id: int,
     employee: schemas.EmployeeCreate,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     updated_employee = crud.update_employee(
         db,
@@ -89,7 +95,8 @@ def update_employee(
 )
 def delete_employee(
     employee_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    current_user=Depends(get_current_user)
 ):
     deleted_employee = crud.delete_employee(
         db,
